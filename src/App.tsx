@@ -1,35 +1,35 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useAtomValue } from "jotai";
+import { ThemeProvider } from "@/components/theme-provider";
+import { ModeToggle } from "@/components/theme-mode-toggle";
+import { BasicBlock } from "@/components/block/basic-block";
+
+import { blocksAtom } from "@/lib/atom";
+import { useHandleEnterEvent } from "@/lib/hooks/useHandleEnterEvent";
+import { useHandleDeleteEvent } from "./lib/hooks/useHandleDeleteEvent";
+
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const blocks = useAtomValue(blocksAtom);
+
+  useHandleEnterEvent();
+  useHandleDeleteEvent();
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <header>
+        <div>Hello, World</div>
+        <ModeToggle />
+      </header>
+      <main>
+        <div className="content">
+          {blocks.map((item) => (
+            <BasicBlock key={item.id} id={item.id} initialText={item.content} />
+          ))}
+        </div>
+      </main>
+    </ThemeProvider>
+  );
 }
 
-export default App
+export default App;
