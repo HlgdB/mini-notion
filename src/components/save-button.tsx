@@ -5,7 +5,7 @@ import { blockIdDataMap } from "@/lib/blockStore";
 import { ID_LIST_KEY, MAP_ENTRIES_KEY } from "@/lib/constant";
 
 import { useAtomValue } from "jotai";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { toast } from "sonner";
 
 export const SaveButton = () => {
@@ -32,6 +32,17 @@ export const SaveButton = () => {
       toast.error("Save article failed.");
     }
   }, [blockIds]);
+
+  useEffect(() => {
+    const handleCtrlS = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "s") {
+        event.preventDefault();
+        handleSave();
+      }
+    };
+    document.addEventListener("keydown", handleCtrlS);
+    return () => document.removeEventListener("keydown", handleCtrlS);
+  }, [handleSave]);
 
   return (
     <Button

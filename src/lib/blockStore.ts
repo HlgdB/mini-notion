@@ -10,11 +10,22 @@ export function resetMapFromEntries(entries: Readonly<[string, BlockData]>[]) {
 
 export function insertBlock2Map(
   curBlockId: string,
-  newBlockId: string,
-  content: string,
+  newBlock: {
+    id: string;
+    content?: string;
+    blockData?: BlockData;
+  },
 ) {
+  const { id: newBlockId, content = "", blockData } = newBlock;
   const curBlockData = blockIdDataMap.get(curBlockId);
   if (curBlockData === undefined) return;
+  if (blockData) {
+    blockIdDataMap.set(newBlockId, {
+      ...blockData,
+      initialContent: document.getElementById(curBlockId)?.textContent ?? "",
+    });
+    return;
+  }
   match(curBlockData)
     .with({ type: BlockTypeEnum.Text }, { type: BlockTypeEnum.Header }, () => {
       blockIdDataMap.set(newBlockId, {

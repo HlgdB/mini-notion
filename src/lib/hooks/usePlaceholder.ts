@@ -5,7 +5,7 @@ export const usePlaceholder = (
   placeholderText: string,
 ) => {
   useEffect(() => {
-    if (!ref.current) return;
+    if (!ref.current || !window.getSelection()?.rangeCount) return;
     ref.current.setAttribute("placeholder", placeholderText);
   }, []);
 

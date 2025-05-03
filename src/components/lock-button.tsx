@@ -1,5 +1,6 @@
 import { useAtom } from "jotai";
 import { Lock, Unlock } from "lucide-react";
+import { useEffect } from "react";
 
 import { lockedAtom } from "@/lib/atom";
 import { cn } from "@/lib/utils";
@@ -7,6 +8,17 @@ import { Button } from "@/components/ui/button";
 
 export const LockButton = () => {
   const [locked, setLocked] = useAtom(lockedAtom);
+
+  useEffect(() => {
+    const handleCtrlS = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "l") {
+        event.preventDefault();
+        setLocked((p) => !p);
+      }
+    };
+    document.addEventListener("keydown", handleCtrlS);
+    return () => document.removeEventListener("keydown", handleCtrlS);
+  }, []);
 
   return (
     <Button

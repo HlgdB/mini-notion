@@ -1,7 +1,8 @@
 import { BlockData, BlockTypeEnum } from "./typing";
 
 export const placeholderMap = {
-  [BlockTypeEnum.Text]: "Write, '/' for commands",
+  [BlockTypeEnum.Text]:
+    "Right-click to change the block type, or Enter to add a new block",
   [BlockTypeEnum.Header]: {
     0: "Article Title",
     1: "Header 1",

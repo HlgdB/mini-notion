@@ -4,6 +4,11 @@ import { SaveButton } from "@/components/save-button";
 import { LockButton } from "@/components/lock-button";
 import { BlockListAdapter } from "@/components/block-list-adapter";
 import { Toaster } from "@/components/ui/sonner";
+import {
+  NewBlockMenuRoot,
+  NewBlockMenuTrigger,
+  NewBlockMenuContent,
+} from "@/components/new-block-menu";
 
 import { useInitDataFromStorage } from "./lib/hooks/useStorage";
 import { useHandleEnterEvent } from "@/lib/hooks/useHandleEnterEvent";
@@ -15,7 +20,7 @@ function App() {
   useInitDataFromStorage();
   useHandleEnterEvent();
   useHandleDeleteEvent();
-
+  
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <header>
@@ -28,7 +33,12 @@ function App() {
       </header>
       <main>
         <div className="content">
-          <BlockListAdapter />
+          <NewBlockMenuRoot modal={false}>
+            <NewBlockMenuTrigger>
+              <BlockListAdapter />
+            </NewBlockMenuTrigger>
+            <NewBlockMenuContent />
+          </NewBlockMenuRoot>
         </div>
       </main>
       <Toaster />

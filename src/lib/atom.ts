@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 import { moveCaretToBlock } from "./utils";
 import { blockIdDataMap, insertBlock2Map } from "./blockStore";
-import { BlockTypeEnum } from "./typing";
+import { BlockData, BlockTypeEnum } from "./typing";
 
 const blockIdsAtom = atom<string[]>([]);
 
@@ -13,15 +13,31 @@ const lockedAtom = atom(false);
 // writeOnlyAtom, 用于插入新的block
 const insertBlockAtom = atom(
   null,
-  (get, set, update: { id: string; content: string }) => {
+  (
+    get,
+    set,
+    update: {
+      id: string;
+      content?: string;
+      blockData?: BlockData;
+    },
+  ) => {
     const locked = get(lockedAtom);
     if (locked) return;
     const blockIds = get(blockIdsAtom);
     const curFocusedBlockId = get(curFocusedBlockIdAtom);
     for (const [idx, blockId] of blockIds.entries()) {
       if (blockId !== curFocusedBlockId) continue;
-      insertBlock2Map(blockId, update.id, update.content);
-      set(blockIdsAtom, (prev) => prev.toSpliced(idx + 1, 0, update.id));
+      insertBlock2Map(blockId, update);
+      if (update.blockData) {
+        set(blockIdsAtom, (prev) => {
+          const newIds = Array.from(prev);
+          newIds[idx] = update.id;
+          return newIds;
+        });
+      } else {
+        set(blockIdsAtom, (prev) => prev.toSpliced(idx + 1, 0, update.id));
+      }
       set(curFocusedBlockIdAtom, update.id);
       return;
     }
@@ -38,8 +54,8 @@ const removeBlockAtom = atom(
     const curFocusedBlockId = get(curFocusedBlockIdAtom);
     if (!curFocusedBlockId) return;
     const idx = blockIds.findIndex((id) => id === curFocusedBlockId);
-    // 要保证除了主标题外的至少有一个block
-    if (idx < 2) return;
+    // 要保证至少有主标题block
+    if (idx < 1) return;
     const curBlockData = blockIdDataMap.get(curFocusedBlockId);
     if (curBlockData?.type === BlockTypeEnum.List) {
       const newId = crypto.randomUUID();
