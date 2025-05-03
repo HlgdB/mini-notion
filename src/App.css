@@ -18,7 +18,8 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: var(--color-red-500);
+  background-color: var(--color-background);
+  border-bottom: 2px double var(--color-border);
 }
 
 main {
@@ -45,6 +46,7 @@ main {
 
 main > .content {
   grid-column: content;
+  padding-top: 0.5rem;
   display: flex;
   flex-direction: column;
   row-gap: 2px;

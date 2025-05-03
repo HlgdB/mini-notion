@@ -131,3 +131,8 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+[contenteditable][placeholder]:empty:after {
+  content: attr(placeholder);
+  color: var(--color-gray-600);
+}

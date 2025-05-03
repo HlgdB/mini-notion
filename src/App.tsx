@@ -1,33 +1,37 @@
-import { useAtomValue } from "jotai";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ModeToggle } from "@/components/theme-mode-toggle";
-import { BasicBlock } from "@/components/block/basic-block";
+import { SaveButton } from "@/components/save-button";
+import { LockButton } from "@/components/lock-button";
+import { BlockListAdapter } from "@/components/block-list-adapter";
+import { Toaster } from "@/components/ui/sonner";
 
-import { blocksAtom } from "@/lib/atom";
+import { useInitDataFromStorage } from "./lib/hooks/useStorage";
 import { useHandleEnterEvent } from "@/lib/hooks/useHandleEnterEvent";
-import { useHandleDeleteEvent } from "./lib/hooks/useHandleDeleteEvent";
+import { useHandleDeleteEvent } from "@/lib/hooks/useHandleDeleteEvent";
 
 import "./App.css";
 
 function App() {
-  const blocks = useAtomValue(blocksAtom);
-
+  useInitDataFromStorage();
   useHandleEnterEvent();
   useHandleDeleteEvent();
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <header>
-        <div>Hello, World</div>
-        <ModeToggle />
+        <div className="font-bold italic">Mini Notion</div>
+        <div className="flex h-full items-center gap-2">
+          <SaveButton />
+          <LockButton />
+          <ModeToggle />
+        </div>
       </header>
       <main>
         <div className="content">
-          {blocks.map((item) => (
-            <BasicBlock key={item.id} id={item.id} initialText={item.content} />
-          ))}
+          <BlockListAdapter />
         </div>
       </main>
+      <Toaster />
     </ThemeProvider>
   );
 }
