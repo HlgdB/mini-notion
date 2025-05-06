@@ -1,5 +1,5 @@
 import { FC, useEffect, useMemo } from "react";
-import { useAtomValue, useAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import { match } from "ts-pattern";
 
 import { blockIdsAtom, changedAtom } from "@/lib/atom";
@@ -12,11 +12,7 @@ import { ListBlock } from "./block/list";
 
 export const BlockListAdapter: FC = () => {
   const blockIds = useAtomValue(blockIdsAtom);
-  const [changed, setChanged] = useAtom(changedAtom);
-
-  useEffect(() => {
-    setChanged(true);
-  }, [blockIds]);
+  const changed = useAtomValue(changedAtom);
 
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {

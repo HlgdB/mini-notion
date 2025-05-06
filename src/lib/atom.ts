@@ -11,6 +11,7 @@ const curFocusedBlockIdAtom = atom<string | null>(null);
 const lockedAtom = atom(false);
 const changedAtom = atom(false);
 
+// writeOnlyAtom, 将文章设置成已修改状态
 const setChangedTrueAtom = atom(null, (get, set) => {
   const changed = get(changedAtom);
   if (changed) return;
@@ -30,6 +31,7 @@ const insertBlockAtom = atom(
   ) => {
     const locked = get(lockedAtom);
     if (locked) return;
+    set(changedAtom, true);
     const blockIds = get(blockIdsAtom);
     const curFocusedBlockId = get(curFocusedBlockIdAtom);
     for (const [idx, blockId] of blockIds.entries()) {
@@ -62,6 +64,7 @@ const removeBlockAtom = atom(
     const idx = blockIds.findIndex((id) => id === curFocusedBlockId);
     // 要保证至少有主标题block
     if (idx < 1) return;
+    set(changedAtom, true);
     const curBlockData = blockIdDataMap.get(curFocusedBlockId);
     if (curBlockData?.type === BlockTypeEnum.List) {
       const newId = crypto.randomUUID();

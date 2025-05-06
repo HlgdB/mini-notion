@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { atom, useAtom } from "jotai";
 
 import { blockIdsAtom } from "@/lib/atom";
+import { blockIdDataMap } from "@/lib/blockStore";
 
 const draggedIdAtom = atom<string | null>(null);
 
@@ -14,6 +15,15 @@ export const useDraggable = (id: string) => {
     (id: string) => {
       setShowDragBtn(false);
       setDraggedId(id);
+      // FIXME: 每次开始拖拽之前需要保存一次所有block的文本内容，文章过长时会有性能问题，应该优化
+      blocks.forEach((id) => {
+        const data = blockIdDataMap.get(id)!;
+        const initialContent = document.getElementById(id)?.textContent ?? "";
+        blockIdDataMap.set(id, {
+          ...data,
+          initialContent,
+        });
+      });
     },
     [id],
   );
