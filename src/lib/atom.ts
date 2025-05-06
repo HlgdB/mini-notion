@@ -9,6 +9,13 @@ const blockIdsAtom = atom<string[]>([]);
 const curFocusedBlockIdAtom = atom<string | null>(null);
 // 是否锁定文章
 const lockedAtom = atom(false);
+const changedAtom = atom(false);
+
+const setChangedTrueAtom = atom(null, (get, set) => {
+  const changed = get(changedAtom);
+  if (changed) return;
+  set(changedAtom, true);
+});
 
 // writeOnlyAtom, 用于插入新的block
 const insertBlockAtom = atom(
@@ -18,8 +25,7 @@ const insertBlockAtom = atom(
     set,
     update: {
       id: string;
-      content?: string;
-      blockData?: BlockData;
+      data?: string | BlockData;
     },
   ) => {
     const locked = get(lockedAtom);
@@ -29,7 +35,7 @@ const insertBlockAtom = atom(
     for (const [idx, blockId] of blockIds.entries()) {
       if (blockId !== curFocusedBlockId) continue;
       insertBlock2Map(blockId, update);
-      if (update.blockData) {
+      if (update.data && typeof update.data !== "string") {
         set(blockIdsAtom, (prev) => {
           const newIds = Array.from(prev);
           newIds[idx] = update.id;
@@ -85,6 +91,6 @@ const removeBlockAtom = atom(
 );
 
 /** readWriteAtom */
-export { blockIdsAtom, curFocusedBlockIdAtom, lockedAtom };
+export { blockIdsAtom, curFocusedBlockIdAtom, lockedAtom, changedAtom };
 /** writeOnlyAtom */
-export { insertBlockAtom, removeBlockAtom };
+export { insertBlockAtom, removeBlockAtom, setChangedTrueAtom };

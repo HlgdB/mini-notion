@@ -1,8 +1,8 @@
-import { FC, useMemo } from "react";
-import { useAtomValue } from "jotai";
+import { FC, useEffect, useMemo } from "react";
+import { useAtomValue, useAtom } from "jotai";
 import { match } from "ts-pattern";
 
-import { blockIdsAtom } from "@/lib/atom";
+import { blockIdsAtom, changedAtom } from "@/lib/atom";
 import { BlockTypeEnum } from "@/lib/typing";
 import { blockIdDataMap } from "@/lib/blockStore";
 
@@ -12,6 +12,21 @@ import { ListBlock } from "./block/list";
 
 export const BlockListAdapter: FC = () => {
   const blockIds = useAtomValue(blockIdsAtom);
+  const [changed, setChanged] = useAtom(changedAtom);
+
+  useEffect(() => {
+    setChanged(true);
+  }, [blockIds]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (changed) {
+        e.preventDefault();
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [changed]);
 
   // 按照 blockIds 的顺序遍历一遍当前数据，更新所有numbered-list-block的序号
   const numberedBlockIdSnMap = useMemo(() => {

@@ -14,23 +14,7 @@ export const placeholderMap = {
 
 export const ID_LIST_KEY = "BLOCK-ID-LIST";
 export const MAP_ENTRIES_KEY = "BLOCK-ID-DATA-MAP-ENTRIES";
-export const initialIdList = [
-  crypto.randomUUID(),
-
-  crypto.randomUUID(),
-  crypto.randomUUID(),
-  crypto.randomUUID(),
-
-  crypto.randomUUID(),
-  crypto.randomUUID(),
-  crypto.randomUUID(),
-
-  crypto.randomUUID(),
-  crypto.randomUUID(),
-  crypto.randomUUID(),
-
-  crypto.randomUUID(),
-];
+export const initialIdList = new Array(11).map(() => crypto.randomUUID());
 export const initialMapEntries: Readonly<[string, BlockData]>[] = [
   [
     initialIdList[0],

@@ -12,16 +12,15 @@ export function insertBlock2Map(
   curBlockId: string,
   newBlock: {
     id: string;
-    content?: string;
-    blockData?: BlockData;
+    data?: string | BlockData;
   },
 ) {
-  const { id: newBlockId, content = "", blockData } = newBlock;
+  const { id: newBlockId, data = "" } = newBlock;
   const curBlockData = blockIdDataMap.get(curBlockId);
   if (curBlockData === undefined) return;
-  if (blockData) {
+  if (typeof data !== "string") {
     blockIdDataMap.set(newBlockId, {
-      ...blockData,
+      ...data,
       initialContent: document.getElementById(curBlockId)?.textContent ?? "",
     });
     return;
@@ -30,14 +29,14 @@ export function insertBlock2Map(
     .with({ type: BlockTypeEnum.Text }, { type: BlockTypeEnum.Header }, () => {
       blockIdDataMap.set(newBlockId, {
         type: BlockTypeEnum.Text,
-        initialContent: content,
+        initialContent: data,
       });
     })
     .with({ type: BlockTypeEnum.List }, (res) => {
       const { numbered } = res.config;
       blockIdDataMap.set(newBlockId, {
         type: BlockTypeEnum.List,
-        initialContent: content,
+        initialContent: data,
         config: {
           numbered,
         },

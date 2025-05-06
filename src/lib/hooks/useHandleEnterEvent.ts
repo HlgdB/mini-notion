@@ -32,7 +32,7 @@ export const useHandleEnterEvent = () => {
         range.deleteContents();
       }
       // nodeType是ELEMENT_NODE表示此时block内部的content为空，直接插入新的block即可
-      insertBlock({ id, content });
+      insertBlock({ id, data: content });
     };
 
     window.addEventListener("keydown", handleEnter);

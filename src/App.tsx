@@ -20,7 +20,7 @@ function App() {
   useInitDataFromStorage();
   useHandleEnterEvent();
   useHandleDeleteEvent();
-  
+
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <header>

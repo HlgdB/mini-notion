@@ -21,7 +21,7 @@ export const NewBlockMenuContent = () => {
         onClick={() => {
           insertBlock({
             id: crypto.randomUUID(),
-            blockData: {
+            data: {
               type: BlockTypeEnum.Text,
               initialContent: "",
             },
@@ -35,7 +35,7 @@ export const NewBlockMenuContent = () => {
         onClick={() => {
           insertBlock({
             id: crypto.randomUUID(),
-            blockData: {
+            data: {
               type: BlockTypeEnum.Header,
               initialContent: "",
               config: {
@@ -51,7 +51,7 @@ export const NewBlockMenuContent = () => {
         onClick={() => {
           insertBlock({
             id: crypto.randomUUID(),
-            blockData: {
+            data: {
               type: BlockTypeEnum.Header,
               initialContent: "",
               config: {
@@ -67,7 +67,7 @@ export const NewBlockMenuContent = () => {
         onClick={() => {
           insertBlock({
             id: crypto.randomUUID(),
-            blockData: {
+            data: {
               type: BlockTypeEnum.Header,
               initialContent: "",
               config: {
@@ -84,7 +84,7 @@ export const NewBlockMenuContent = () => {
         onClick={() => {
           insertBlock({
             id: crypto.randomUUID(),
-            blockData: {
+            data: {
               type: BlockTypeEnum.List,
               initialContent: "",
               config: {
@@ -100,7 +100,7 @@ export const NewBlockMenuContent = () => {
         onClick={() => {
           insertBlock({
             id: crypto.randomUUID(),
-            blockData: {
+            data: {
               type: BlockTypeEnum.List,
               initialContent: "",
               config: {
